@@ -1,0 +1,10 @@
+CREATE DATABASE Bamazon;
+
+USE Bamazon;
+
+CREATE TABLE products(
+	id INTEGER AUTO_INCREMENT NOT NULL,
+    
+    
+
+);
