@@ -1,7 +1,9 @@
-
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 var columnify = require('columnify');
+//https://www.npmjs.com/package/columnify
+
+////////////////////////////////// CONNECT TO DATABASE//////////////////////////////////////////////////////////
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -11,11 +13,83 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "",
-  database: "ice_creamDB"
+  password: "Solarstar99*",
+  database: "bamazon"
 });
 
 connection.connect(function(err) {
   if (err) throw err;
-  console.log("connected as id " + connection.threadId);
 });
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function newQuery(){
+
+console.log("\n");
+console.log("\n");
+console.log("******************************************************************************************************");
+console.log("******************************************************************************************************");
+
+var query = "SELECT * FROM products";
+
+connection.query(query, function(err, res) {
+
+for(var i = 0 ; i < res.length ; i++){
+if(i === 0){
+
+	var columns = columnify([
+		{
+		  id: res[i].item_id,
+		  name: res[i].product_name,
+		  price: res[i].price,
+		  department: res[i].department_name,
+		  quantity_remaining: res[i].stock_quantity,
+		}],
+		{
+		  minWidth: 20,
+		  config: {
+		    description: {maxWidth: 30}
+		  }
+		}
+		); // End Comlumnify
+
+console.log(columns);
+
+} else {
+
+	var columns = columnify([
+		{
+		  id: res[i].item_id,
+		  name: res[i].product_name,
+		  price: res[i].price,
+		  department: res[i].department_name,
+		  quantity_remaining: res[i].stock_quantity,
+		}],
+		{
+		  minWidth: 20,
+		  showHeaders: false,
+		  config: {
+		    description: {maxWidth: 30},
+		  }
+		}
+		); // End Comlumnify
+
+	console.log(columns);
+
+} // End Else Statement
+
+}; // End For Loop
+
+console.log("******************************************************************************************************");
+console.log("******************************************************************************************************");
+console.log("\n");
+console.log("\n");
+
+}); // End Query
+
+}; // End Function
+
+newQuery();
+
+
