@@ -75,6 +75,7 @@ console.log(columns);
 		}
 		); // End Comlumnify
 
+	console.log("\n");
 	console.log(columns);
 
 } // End Else Statement
@@ -88,7 +89,31 @@ console.log("\n");
 
 }); // End Query
 
-}; // End Function
+setTimeout(function(){
+
+inquirer.prompt({
+
+    name: "prompt",
+    message: "What is the id of the item you would like to purchase?"
+
+  }).then(function(answer) {
+
+  	var query = "SELECT item_id FROM products";
+
+	connection.query(query, function(err, res) {
+
+		//https://www.w3schools.com/sql/sql_update.asp
+
+		for(var i = 0 ; i < res.length ; i++){
+			console.log('yo');
+		}
+
+	}); // Connection Method Query Ends
+
+  }); // then portion of inquirer prompt ends
+}, 1500);
+
+}; // End newQuery function
 
 newQuery();
 
