@@ -42,7 +42,7 @@ VALUES (26220,"Brazilian_Real","fiat_currency",0.3201,13800);
 INSERT INTO products (item_id,product_name,department_name,price,stock_quantity)
 VALUES (26544,"Euro","fiat_currency",1.09,48652);
 
-SELECT * FROM products;
+SELECT item_id FROM products;
 
 
 
