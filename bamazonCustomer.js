@@ -108,12 +108,11 @@ connection.query(query, function(err, res) {
 		      			itemHolder = res[i];
 		      			console.log("\nThere are " + res[i].stock_quantity + " " + res[i].product_name + " left in stock" );
 		      			return true;
-		      		} else{ 
-		      			console.log("\nThats not one of our availible items. Please choose again");
-		      			return false;
 		      		}
 		      	}
 		      	
+		      	console.log("\nThats not one of our availible items. Please choose again");
+		      	return false;
 		      }
 		      	console.log("\nThats not a number, try again")
 		     	return false;	
@@ -150,7 +149,7 @@ connection.query(query, function(err, res) {
 		  }]).then(function(answer) {
 
 		 	
-		  		setTimeout(function(){newQuery()}, 1500);
+		  		setTimeout(function(){newQuery()}, 3000);
 
 
 		  }); // then portion of inquirer prompt ends
