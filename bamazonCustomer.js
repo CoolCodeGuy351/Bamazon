@@ -91,26 +91,72 @@ console.log("\n");
 
 setTimeout(function(){
 
-inquirer.prompt({
+var query = "SELECT * FROM products";
 
-    name: "prompt",
-    message: "What is the id of the item you would like to purchase?"
+connection.query(query, function(err, res) {
 
-  }).then(function(answer) {
+	var itemHolder;
 
-  	var query = "SELECT item_id FROM products";
+		inquirer.prompt([{
+		    name: "item",
+		    type: "input",
+		    message: "Select your item by inputing the products unique identification number (id):",
+		    validate: function(value) {
+		      if (isNaN(value) === false) {
+		      	for(var i = 0 ; i < res.length ; i++){
+		      		if(res[i].item_id === parseInt(value)){
+		      			itemHolder = res[i];
+		      			console.log("\nThere are " + res[i].stock_quantity + " " + res[i].product_name + " left in stock" );
+		      			return true;
+		      		} else{ 
+		      			console.log("\nThats not one of our availible items. Please choose again");
+		      			return false;
+		      		}
+		      	}
+		      	
+		      }
+		      	console.log("\nThats not a number, try again")
+		     	return false;	
+		    }
+		  },{
+		    name: "quant",
+		    type: "input",
+		    message: "How many would you like to purchase?",
+		    validate: function(amount) {
+		      if (isNaN(amount) === false){
 
-	connection.query(query, function(err, res) {
+		      	if(amount > itemHolder.stock_quantity){
+		      		console.log("\nSorry we dont have that many of that item in stock right now, try ordering less.");
+		      		return false;
+		      	}
 
-		//https://www.w3schools.com/sql/sql_update.asp
+		      	var total = itemHolder.price * amount;
+		      	var itemLeft = itemHolder.stock_quantity - amount;
+		      	connection.query("UPDATE products SET ? WHERE ?", [
+		      	{
+		      		"stock_quantity": parseInt(itemHolder.stock_quantity) - parseInt(amount)
+                },
+                {  "item_id": itemHolder.item_id
+            	}],function(err, res) {
+                    console.log("Your purchase has been completed. The total was $"+ total + " and there are " + itemLeft + " left!")
 
-		for(var i = 0 ; i < res.length ; i++){
-			console.log('yo');
-		}
+                });
 
-	}); // Connection Method Query Ends
+		        return true;
+		    }
+		      console.log("\nThats not a number, try again");
+		      return false;
+		    }
+		  }]).then(function(answer) {
 
-  }); // then portion of inquirer prompt ends
+		 	
+		  		setTimeout(function(){newQuery()}, 1500);
+
+
+		  }); // then portion of inquirer prompt ends
+
+}); // Connection Method Query Ends
+
 }, 1500);
 
 }; // End newQuery function
